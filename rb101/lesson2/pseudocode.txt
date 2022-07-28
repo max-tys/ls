@@ -1,0 +1,74 @@
+Write out pseudo-code (both casual and formal) that does the following:
+
+1. A method that returns the sum of two integers.
+
+Assign a variable to the first integer.
+Assign a second variable to the second integer.
+Add both variables together and assign the result to a third variable.
+Return the third variable.
+
+Set variable1 = get user input
+Set variable2 = get user input
+Set variable3 = variable1 + variable2
+Return variable3
+
+2. A method that takes an array of strings, and returns a string that is all those strings concatenated together
+
+Extract the first string from the array and add it to a new string.
+Extract the second string from the array and add it to the new string.
+Continue this process for every remaining string in the array, until the array is exhausted.
+Return the new string.
+
+Set new_string = ""
+For each string in strings
+  new_string << string
+Return new_string
+
+3. A method that takes an array of integers, and returns a new array with every other element from the original array, starting with the first element. For instance:
+  everyOther([1,4,7,2,5]) # => [1,7,5]
+
+Take the first integer from the array and put it in a new array.
+Skip the odd index integers, keep the even index integers
+
+Set new_array = ""
+For each element in the array, with index
+  If the index of the element is an even number,
+    new_array << element
+  Else
+    go to the next iteration
+Return new_array
+
+4. A method that determines the index of the 3rd occurrence of a given character in a string. For instance, if the given character is 'x' and the string is 'axbxcdxex', the method should return 6 (the index of the 3rd 'x'). If the given character does not occur at least 3 times, return nil.
+
+Initialise a repeat counter and set it to 0.
+Go through each character in the string.
+Compare the string character to the given character.
+If there is a match, increase the repeat counter by one, and continue searching.
+If at any given time, the repeat counter hits 3, return the index of the loop.
+Do this until there are no characters left in the string.
+Return nil if the repeat counter does not hit 3.
+
+repeat_counter = 0
+for each character in the string, with index
+  if string_character == given_character
+    repeat_counter += 1
+  if repeat_counter == 3
+    return index
+  if this is the last index, and repeat_counter < 3
+    return nil
+
+5. A method that takes two arrays of numbers and returns the result of merging the arrays. The elements of the first array should become the elements at the even indexes of the returned array, while the elements of the second array should become the elements at the odd indexes. For instance:
+  merge([1, 2, 3], [4, 5, 6]) # => [1, 4, 2, 5, 3, 6]
+
+Start with the first array.
+Take the first element of the first array and put it into the new array.
+Remove the first element from the first array.
+Take the first element of the second array and put it into the new array.
+Remove the second element from the second array.
+Continue doing this for both arrays until the arrays are exhausted.
+Return the new array.
+
+Loop x times, x = length of the first array.
+    new_array << array1.pop (or whichever method removes the first element)
+    new_array << array2.pop (or whichever method removes the first element)
+Return new_array

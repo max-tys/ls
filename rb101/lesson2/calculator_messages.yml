@@ -1,0 +1,14 @@
+welcome: "Welcome to Calculator! Enter your name:"
+valid_name: "Make sure to enter a valid name."
+first_number: "What is the first number?"
+valid_number: "That's not a valid number. Try again."
+second_number: "What is the second number?"
+operator: |
+    What operation would you like to perform?
+    1) Add
+    2) Subtract
+    3) Multiply
+    4) Divide
+valid_operator: "Invalid operation. Must choose 1, 2, 3, or 4."
+recalculate: "Do you want to perform another calculation? (Y to calculate again)"
+goodbye: "Thanks for using the calculator. Goodbye!"
