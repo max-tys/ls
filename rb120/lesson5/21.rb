@@ -6,14 +6,14 @@ module Countable
   # Returns the most advantageous number of points for a Blackjack game
   def points
     ranks = cards_to_ranks(cards)
-    number_of_aces = ranks.count('A')
     max_points = ranks_to_points(ranks).sum
+
+    number_of_aces = ranks.count('A')
     adjusted_points = max_points
 
-    loop do
-      break if number_of_aces == 0 || adjusted_points <= Game::LIMIT
+    number_of_aces.times do
+      break if adjusted_points <= Blackjack::LIMIT
       adjusted_points -= 10
-      number_of_aces -= 1
     end
 
     adjusted_points
@@ -28,9 +28,9 @@ module Countable
   # The default value of an ace may be overridden
   def ranks_to_points(ranks, ace_default: 11)
     ranks.map do |rank|
-      if %w(2 3 4 5 6 7 8 9).include? rank
+      if %w(2 3 4 5 6 7 8 9 10).include? rank
         rank.to_i
-      elsif %w(10 J Q K).include? rank
+      elsif %w(J Q K).include? rank
         10
       else
         ace_default == 11 ? 11 : ace_default
@@ -100,29 +100,30 @@ end
 class Deck
   include Countable
 
-  SUITS = %w(♠ ♥ ♦ ♣)
-  RANKS = %w(2 3 4 5 6 7 8 9 10 J Q K A)
-
   attr_reader :cards
 
   def initialize
     @cards = []
-    SUITS.each do |suit|
-      RANKS.each do |rank|
+    Card::SUITS.each do |suit|
+      Card::RANKS.each do |rank|
         @cards << Card.new(suit, rank)
       end
     end
-    @cards.shuffle!
+
+    cards.shuffle!
   end
 
   def deal
-    @cards.pop
+    cards.pop
   end
 end
 
 # Card objects have a suit and a rank, which is used to determine a card's value
 class Card
   attr_reader :suit, :rank
+
+  SUITS = %w(♠ ♥ ♦ ♣)
+  RANKS = %w(2 3 4 5 6 7 8 9 10 J Q K A)
 
   def initialize(suit, rank)
     @suit = suit
@@ -135,7 +136,7 @@ class Card
 end
 
 # Main game orchestration.
-class Game
+class Blackjack
   LIMIT = 21
 
   attr_reader :deck, :player, :dealer, :winner
@@ -166,14 +167,14 @@ class Game
     puts ""
 
     puts "Press 'y' to read the rules of Blackjack."
-    puts "Press any other key to play Blackjack!"
+    print "Press any other key to play Blackjack! "
 
     input = STDIN.getch
     show_rules if input == 'y'
   end
 
   def suit_symbols
-    Deck::SUITS.join(' ')
+    Card::SUITS.join(' ')
   end
 
   # rubocop:disable Metrics/AbcSize
@@ -219,14 +220,16 @@ class Game
   end
 
   def pause_execution
-    puts "Press any key to continue."
+    print "Press any key to continue..."
     STDIN.getch
   end
 
   # The first stage in Blackjack is the dealing of cards.
   def deal_cards
-    2.times { player.cards << deck.deal }
-    2.times { dealer.cards << deck.deal }
+    2.times do
+      player.cards << deck.deal
+      dealer.cards << deck.deal
+    end
   end
 
   # The game ends immediately if someone has a blackjack hand.
@@ -284,7 +287,7 @@ class Game
       player.move = gets.chomp
       break if %w(1 2 3 4).include? player.move
 
-      puts "Invalid input. Please enter '1', '2', '3', or '4'."
+      puts "Sorry, please enter '1', '2', '3', or '4'."
     end
 
     puts ""
@@ -392,4 +395,4 @@ class Game
   end
 end
 
-Game.new.start
+Blackjack.new.start
