@@ -83,7 +83,17 @@ class TodoList
       counter += 1
     end
 
-    todos
+    self # returns the calling TodoList object
+  end
+
+  def select
+    new_list = TodoList.new(title)
+
+    each do |todo|
+      new_list << todo if yield(todo)
+    end
+
+    new_list # returns a new TodoList object
   end
 
   private
@@ -133,6 +143,7 @@ end
 todo1 = Todo.new("Buy milk")
 todo2 = Todo.new("Clean room")
 todo3 = Todo.new("Go to gym")
+
 list = TodoList.new("Today's Todos")
 list.add(todo1)
 list.add(todo2)
