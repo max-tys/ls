@@ -12,15 +12,6 @@ class TodoList
     @todos = []
   end
 
-  def add(todo)
-    if todo.instance_of? Todo # or todo.class == Todo
-      todos << todo
-    else
-      raise TypeError, "Can only add Todo objects"
-    end
-  end
-  alias_method :<<, :add
-
   def size
     todos.size
   end
@@ -33,13 +24,26 @@ class TodoList
     todos.last
   end
 
-  def to_a
-    todos.clone
+  def shift
+    todos.shift
+  end
+
+  def pop
+    todos.pop
   end
 
   def done?
     todos.all? { |todo| todo.done? }
   end
+
+  def add(todo)
+    if todo.instance_of? Todo # or todo.class == Todo
+      todos << todo
+    else
+      raise TypeError, "Can only add Todo objects"
+    end
+  end
+  alias_method :<<, :add
 
   def item_at(idx)
     todos.fetch(idx)
@@ -57,14 +61,6 @@ class TodoList
     todos.map!(&:done!)
   end
 
-  def shift
-    todos.shift
-  end
-
-  def pop
-    todos.pop
-  end
-
   def remove_at(idx)
     todos.delete(item_at(idx))
   end
@@ -73,6 +69,10 @@ class TodoList
     text = "---- #{title} ----" + "\n"
     todos.each { |todo| text << todo.to_s + "\n" }
     text
+  end
+
+  def to_a
+    todos.clone
   end
 
   def each
@@ -94,6 +94,35 @@ class TodoList
     end
 
     new_list # returns a new TodoList object
+  end
+
+  def find_by_title(search_term)
+    each do |todo|
+      return todo if search_term == todo.title
+    end
+
+    nil
+  end
+
+  def all_done
+    select { |todo| todo.done? }
+  end
+
+  def all_not_done
+    select { |todo| !todo.done? }
+  end
+
+  def mark_done(title)
+    # can't invoke done! on return value of find_by_title if title is invalid
+    find_by_title(title).done! if find_by_title(title)
+  end
+
+  def mark_all_done
+    each { |todo| todo.done! }
+  end
+
+  def mark_all_undone
+    each { |todo| todo.undone! }
   end
 
   private
@@ -143,15 +172,17 @@ end
 todo1 = Todo.new("Buy milk")
 todo2 = Todo.new("Clean room")
 todo3 = Todo.new("Go to gym")
+todo4 = Todo.new("Buy milk")
+todos = [todo1, todo2, todo3, todo4]
 
 list = TodoList.new("Today's Todos")
-list.add(todo1)
-list.add(todo2)
-list.add(todo3)
+todos.each { |todo| list.add(todo) }
 
-list.each do |todo|
-  puts todo                   # calls Todo#to_s
-end
+list.mark_done("Buy milk")
+
+puts list
+puts list.all_done
+puts list.all_not_done
 
 # ---- Adding to the list -----
 
