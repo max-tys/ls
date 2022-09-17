@@ -66,7 +66,7 @@ class TodoList
   end
 
   def to_s
-    text = "---- #{title} ----" + "\n"
+    text = "---- #{title} ----\n"
     todos.each { |todo| text << todo.to_s + "\n" }
     text
   end
