@@ -58,7 +58,7 @@ class TodoList
   end
 
   def done!
-    todos.map!(&:done!)
+    todos.each(&:done!)
   end
 
   def remove_at(idx)
@@ -66,9 +66,7 @@ class TodoList
   end
 
   def to_s
-    text = "---- #{title} ----\n"
-    todos.each { |todo| text << todo.to_s + "\n" }
-    text
+    "---- #{title} ----\n" + todos.join("\n")
   end
 
   def to_a
@@ -169,20 +167,20 @@ class Todo
 end
 
 # given
-todo1 = Todo.new("Buy milk")
-todo2 = Todo.new("Clean room")
-todo3 = Todo.new("Go to gym")
-todo4 = Todo.new("Buy milk")
-todos = [todo1, todo2, todo3, todo4]
+# todo1 = Todo.new("Buy milk")
+# todo2 = Todo.new("Clean room")
+# todo3 = Todo.new("Go to gym")
+# todo4 = Todo.new("Buy milk")
+# todos = [todo1, todo2, todo3, todo4]
 
-list = TodoList.new("Today's Todos")
-todos.each { |todo| list.add(todo) }
+# list = TodoList.new("Today's Todos")
+# todos.each { |todo| list.add(todo) }
 
-list.mark_done("Buy milk")
+# list.mark_done("Buy milk")
 
-puts list
-puts list.all_done
-puts list.all_not_done
+# puts list
+# puts list.all_done
+# puts list.all_not_done
 
 # ---- Adding to the list -----
 
