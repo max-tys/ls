@@ -76,51 +76,141 @@
 
 # 5 Encrypted Pioneers (ROT13)
 
-UPPER = ('A'..'Z').to_a
-LOWER = ('a'..'z').to_a
+# encrypted_names = %Q(Nqn Ybirynpr
+# Tenpr Ubccre
+# Nqryr Tbyqfgvar
+# Nyna Ghevat
+# Puneyrf Onoontr
+# Noqhyynu Zhunzznq ova Zhfn ny-Xujnevmzv
+# Wbua Ngnanfbss
+# Ybvf Unvog
+# Pynhqr Funaaba
+# Fgrir Wbof
+# Ovyy Tngrf
+# Gvz Orearef-Yrr
+# Fgrir Jbmavnx
+# Xbaenq Mhfr
+# Fve Nagbal Ubner
+# Zneiva Zvafxl
+# Lhxvuveb Zngfhzbgb
+# Unllvz Fybavzfxv
+# Tregehqr Oynapu)
 
-def decrypt(name)
-  plain_text = ''
+# encrypted_name_list = encrypted_names.split("\n")
 
-  name.chars do |char|
-    if UPPER.include? char
-      idx = UPPER.index(char)
-      new_idx = (idx + 13) % 26
-      plain_text << UPPER[new_idx]
-    elsif LOWER.include? char
-      idx = LOWER.index(char)
-      new_idx = (idx + 13) % 26
-      plain_text << LOWER[new_idx]
-    else
-      plain_text << char
-    end
-  end
+# UPPER = ('A'..'Z').to_a
+# LOWER = ('a'..'z').to_a
 
-  plain_text
-end
+# def rot13(cipher_text)
+#   plain_text = ''
 
-names = %Q(Nqn Ybirynpr
-Tenpr Ubccre
-Nqryr Tbyqfgvar
-Nyna Ghevat
-Puneyrf Onoontr
-Noqhyynu Zhunzznq ova Zhfn ny-Xujnevmzv
-Wbua Ngnanfbss
-Ybvf Unvog
-Pynhqr Funaaba
-Fgrir Wbof
-Ovyy Tngrf
-Gvz Orearef-Yrr
-Fgrir Jbmavnx
-Xbaenq Mhfr
-Fve Nagbal Ubner
-Zneiva Zvafxl
-Lhxvuveb Zngfhzbgb
-Unllvz Fybavzfxv
-Tregehqr Oynapu)
+#   cipher_text.chars do |char|
+#     if /[a-z]/i =~ char
+#       idx = UPPER.index(char.upcase)
+#       new_idx = (idx + 13) % 26
+#       plain_text << (UPPER.include?(char) ? UPPER[new_idx] : LOWER[new_idx])
+#     else
+#       plain_text << char
+#     end
+#   end
 
-name_list = names.split("\n")
+#   plain_text
+# end
 
-name_list.each do |encrypted_name|
-  puts decrypt(encrypted_name)
-end
+# encrypted_name_list.each do |encrypted_name|
+#   puts rot13(encrypted_name)
+# end
+
+# 6 Iterators: True for Any?
+
+# def any?(array)
+#   array.each { |element| return true if yield(element) }
+#   false
+# end
+
+# p any?([1, 3, 5, 6]) { |value| value.even? } == true
+# p any?([1, 3, 5, 7]) { |value| value.even? } == false
+# p any?([2, 4, 6, 8]) { |value| value.odd? } == false
+# p any?([1, 3, 5, 7]) { |value| value % 5 == 0 } == true
+# p any?([1, 3, 5, 7]) { |value| true } == true
+# p any?([1, 3, 5, 7]) { |value| false } == false
+# p any?([]) { |value| true } == false
+
+# 7 Iterators: True for All?
+
+# def all?(collection)
+#   collection.each { |item| return false unless yield(item) }
+#   true
+# end
+
+# p all?([1, 3, 5, 6]) { |value| value.odd? } == false
+# p all?([1, 3, 5, 7]) { |value| value.odd? } == true
+# p all?([2, 4, 6, 8]) { |value| value.even? } == true
+# p all?([1, 3, 5, 7]) { |value| value % 5 == 0 } == false
+# p all?([1, 3, 5, 7]) { |value| true } == true
+# p all?([1, 3, 5, 7]) { |value| false } == false
+# p all?([]) { |value| false } == true
+
+# 8 Iterators: True for None?
+
+# def none?(collection)
+#   collection.each { |item| return false if yield(item) }
+#   true
+# end
+
+# p none?([1, 3, 5, 6]) { |value| value.even? } == false
+# p none?([1, 3, 5, 7]) { |value| value.even? } == true
+# p none?([2, 4, 6, 8]) { |value| value.odd? } == true
+# p none?([1, 3, 5, 7]) { |value| value % 5 == 0 } == false
+# p none?([1, 3, 5, 7]) { |value| true } == false
+# p none?([1, 3, 5, 7]) { |value| false } == true
+# p none?([]) { |value| true } == true
+
+# 9 Iterators: True for One?
+
+# def one?(collection)
+#   # new_collection = collection.select { |item| yield(item) }
+#   # new_collection.size == 1
+
+#   matches = 0
+
+#   collection.each do |item|
+#     matches += 1 if yield(item)
+#     return false if matches > 1
+#   end
+
+#   matches == 1
+# end
+
+# p one?([1, 3, 5, 6]) { |value| value.even? }    == true
+# p one?([1, 3, 5, 7]) { |value| value.odd? }     == false
+# p one?([2, 4, 6, 8]) { |value| value.even? }    == false
+# p one?([1, 3, 5, 7]) { |value| value % 5 == 0 } == true
+# p one?([1, 3, 5, 7]) { |value| true }           == false
+# p one?([1, 3, 5, 7]) { |value| false }          == false
+# p one?([]) { |value| true }                     == false
+
+# 10 Count Items
+
+# def count(array)
+#   matches = 0
+#   array.each { |item| matches += 1 if yield(item) }
+#   matches
+# end
+
+# def count(array)
+#   idx = 0
+#   matches = 0
+#   while idx < array.size
+#     matches += 1 if yield(array[idx])
+#     idx += 1
+#   end
+#   matches
+# end
+
+# p count([1,2,3,4,5]) { |value| value.odd? } == 3
+# p count([1,2,3,4,5]) { |value| value % 3 == 1 } == 2
+# p count([1,2,3,4,5]) { |value| true } == 5
+# p count([1,2,3,4,5]) { |value| false } == 0
+# p count([]) { |value| value.even? } == 0
+# p count(%w(Four score and seven)) { |value| value.size == 5 } == 2
