@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Directory Index</title>
+</head>
+
+<body>
+  <h1>List of Public Files</h1>
+  <p>
+    <a href="/">Sort files in ascending order (A-Z)</a>
+  </p>
+  <p>
+    <a href="/?order=desc">Sort files in descending order (Z-A)</a>
+  </p>
+  <ul>
+    <% @file_names.each do |name| %>
+      <li>
+        <a href="<%= name %>"><%= name %></a>
+      </li>
+    <% end %>
+  </ul>
+</body>
+</html>
