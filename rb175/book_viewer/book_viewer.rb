@@ -30,7 +30,6 @@ get "/search" do
   # redirect to /search if user submits an empty query string.
   redirect "/search" if @query.is_a?(String) && @query.empty?
 
-  # key is chapter number, value is chapter name.
   @matching_chapters = matching_chapters
 
   erb :search
@@ -41,17 +40,19 @@ not_found do
 end
 
 helpers do
-  # input chapter contents, output html formatted paragraphs
+  # input plain text, output html formatted paragraphs
   def in_paragraphs(text)
     text.split("\n\n").map.with_index do |para, idx|
       "<p id=#{idx}>#{para}</p>"
     end.join
   end
 
-  def bold_query(text)
-    text.gsub(@query, "<strong>#{@query}</strong>")
+  # input plain text, output text with highlighted queries
+  def highlight_query(text)
+    text.gsub(@query, "<mark>#{@query}</mark>")
   end
 
+  # iterates over each chapter and yields its index, title and contents
   def each_chapter
     @contents.each_with_index do |name, index|
       number = index + 1
@@ -60,23 +61,26 @@ helpers do
     end
   end
 
-  # returns an array of hashes
+  # returns an array of hashes; each hash represents a chapter containing query
   def matching_chapters
-    # key is chapter number, value is chapter name.
     results = []
 
-    # guard against nil queries when user first loads /search
+    # guard against nil queries when user first loads "/search"
     return results unless @query
 
     each_chapter do |number, name, contents|
+      # key is para id, value is para contents
       matching_paragraphs = {}
 
+      # split chapter contents into array of paragraphs
+      # populate matching_paragraphs with bolded queries
       contents.split("\n\n").each_with_index do |paragraph, idx|
         if paragraph.include? @query
-          matching_paragraphs[idx] = bold_query(paragraph)
+          matching_paragraphs[idx] = highlight_query(paragraph)
         end
       end
 
+      # populate results array if chapter contains query string
       if contents.include? @query
         results << {
           number: number,
