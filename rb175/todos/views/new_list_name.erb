@@ -1,0 +1,14 @@
+<form action="/lists/<%= @id %>/rename" method="post">
+  <dl>
+    <dt>
+      <label for="list_name">Enter the new name for  "<%= @list[:name] %>":
+      </label>
+    </dt>
+    <dd>
+      <input name="new_name" placeholder="New list name" type="text" value="">
+    </dd>
+  </dl>
+  <fieldset class="actions">
+    <input type="submit" value="Rename">
+  </fieldset>
+</form>

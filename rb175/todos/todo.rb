@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/reloader'
+require "sinatra/content_for"
 require 'tilt/erubis'
 
 configure do
@@ -21,7 +22,7 @@ get '/lists' do
   erb :lists, layout: :layout
 end
 
-# Render the new list form
+# View the form to make a new list
 get '/lists/new' do
   erb :new_list, layout: :layout
 end
@@ -32,7 +33,7 @@ get '/lists/clear' do
   redirect '/lists'
 end
 
-# Return an error message if the name is invalid.
+# Return an error message if list name is invalid.
 # Return nil if name is valid.
 def error_for_list_name(name)
   if !(1..100).cover? name.length # use cover? instead of include?
@@ -42,7 +43,7 @@ def error_for_list_name(name)
   end
 end
 
-# Create a new list
+# Create a new list, check for invalid inputs
 post '/lists' do
   list_name = params[:list_name].strip
   error = error_for_list_name(list_name)
@@ -56,8 +57,7 @@ post '/lists' do
   end
 end
 
-# View / edit a single list
-
+# View a single list
 get '/lists/:id' do
   @id = params[:id].to_i
   @list = session[:lists][@id]
@@ -69,5 +69,19 @@ post '/lists/:id' do
   todo_name = params[:todo]
   id = params[:id].to_i
   session[:lists][id][:todos] << todo_name
+  redirect "/lists/#{id}"
+end
+
+# Rename existing list
+get '/lists/:id/rename' do
+  @id = params[:id].to_i
+  @list = session[:lists][@id]
+  erb :new_list_name, layout: :layout
+end
+
+post '/lists/:id/rename' do
+  new_name = params[:new_name]
+  id = params[:id].to_i
+  session[:lists][id][:name] = new_name
   redirect "/lists/#{id}"
 end
