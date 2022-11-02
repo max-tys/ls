@@ -1,0 +1,9 @@
+<ul id="no_list">
+  <li><%= @list[:name] %></li>
+</ul>
+
+<p>Enter a new todo item:</p>
+<form action='/list/new' method='post'>
+  <input name="todo">
+  <button type='submit'>Search</button>
+</form>
