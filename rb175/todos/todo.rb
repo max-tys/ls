@@ -21,14 +21,6 @@ get '/lists' do
   erb :lists, layout: :layout
 end
 
-# View a specific list
-
-get '/lists/:index' do
-  idx =  params[:index].to_i
-  @list = session[:lists][idx]
-  erb :list, layout: :layout
-end
-
 # Render the new list form
 get '/lists/new' do
   erb :new_list, layout: :layout
@@ -42,7 +34,6 @@ end
 
 # Return an error message if the name is invalid.
 # Return nil if name is valid.
-
 def error_for_list_name(name)
   if !(1..100).cover? name.length # use cover? instead of include?
     'The list name must be between 1 and 100 characters.'
@@ -63,4 +54,20 @@ post '/lists' do
     session[:success] = 'The list has been created.'
     redirect '/lists'
   end
+end
+
+# View / edit a single list
+
+get '/lists/:id' do
+  @id = params[:id].to_i
+  @list = session[:lists][@id]
+  erb :list, layout: :layout
+end
+
+# Create a new list
+post '/lists/:id' do
+  todo_name = params[:todo]
+  id = params[:id].to_i
+  session[:lists][id][:todos] << todo_name
+  redirect "/lists/#{id}"
 end
