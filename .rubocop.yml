@@ -61,8 +61,8 @@ Style/EmptyLiteral:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
-  Description: Require the addition of the frozen string literal comment.
   Enabled: false
+  Description: Require the addition of the frozen string literal comment.
 
 Style/GuardClause:
   Description: Check for conditionals that can be replaced with guard clauses.
