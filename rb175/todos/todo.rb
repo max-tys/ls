@@ -1,5 +1,3 @@
-# Stopped at 7.08 remaining
-
 require 'sinatra'
 require 'sinatra/reloader'
 require "sinatra/content_for"
@@ -18,18 +16,18 @@ get '/' do
   redirect '/lists'
 end
 
-# View all the lists
+# View all the lists, lists.erb
 get '/lists' do
   @lists = session[:lists]
   erb :lists, layout: :layout
 end
 
-# View the form to make a new list
+# View the form to make a new list, new_list.erb
 get '/lists/new' do
   erb :new_list, layout: :layout
 end
 
-# Clears all lists
+# Clears all lists, lists.erb
 get '/lists/clear' do
   session[:lists] = []
   redirect '/lists'
@@ -59,32 +57,51 @@ post '/lists' do
   end
 end
 
-# View a single list
+# View a single list, list.erb
 get '/lists/:id' do
   @id = params[:id].to_i
   @list = session[:lists][@id]
   erb :list, layout: :layout
 end
 
-# View the form to rename existing list
-get '/lists/:id/rename' do
+# View the form to edit existing list, edit_list.erb
+get '/lists/:id/edit' do
   @id = params[:id].to_i
   @list = session[:lists][@id]
-  erb :new_list_name, layout: :layout
+  erb :edit_list, layout: :layout
 end
 
 # Rename existing list
 post '/lists/:id' do
-  new_name = params[:new_name]
-  id = params[:id].to_i
-  session[:lists][id][:name] = new_name
-  redirect "/lists/#{id}"
+  list_name = params[:list_name].strip
+  @id = params[:id].to_i
+  @list = session[:lists][@id]
+
+  error = error_for_list_name(list_name)
+  if error
+    session[:error] = error
+    erb :edit_list, layout: :layout
+  else
+    @list[:name] = list_name
+    session[:success] = "The list has been renamed."
+    redirect "/lists/#{@id}"
+  end
+end
+
+# Delete single list, list.erb
+post '/lists/:id/delete' do
+  idx = params[:id].to_i
+  list_name = session[:lists][idx][:name]
+  session[:lists].delete_at(idx)
+  session[:success] = "#{list_name} has been deleted."
+  redirect '/lists'
 end
 
 # Create a new todo item
-post '/lists/:id/new' do
+post '/lists/:id/todos' do
   todo_name = params[:todo]
   id = params[:id].to_i
   session[:lists][id][:todos] << todo_name
+  session[:success] = "#{todo_name} has been added to the list."
   redirect "/lists/#{id}"
 end
