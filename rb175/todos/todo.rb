@@ -1,3 +1,5 @@
+# Stopped at 7.08 remaining
+
 require 'sinatra'
 require 'sinatra/reloader'
 require "sinatra/content_for"
@@ -64,24 +66,25 @@ get '/lists/:id' do
   erb :list, layout: :layout
 end
 
-# Create a new list
-post '/lists/:id' do
-  todo_name = params[:todo]
-  id = params[:id].to_i
-  session[:lists][id][:todos] << todo_name
-  redirect "/lists/#{id}"
-end
-
-# Rename existing list
+# View the form to rename existing list
 get '/lists/:id/rename' do
   @id = params[:id].to_i
   @list = session[:lists][@id]
   erb :new_list_name, layout: :layout
 end
 
-post '/lists/:id/rename' do
+# Rename existing list
+post '/lists/:id' do
   new_name = params[:new_name]
   id = params[:id].to_i
   session[:lists][id][:name] = new_name
+  redirect "/lists/#{id}"
+end
+
+# Create a new todo item
+post '/lists/:id/new' do
+  todo_name = params[:todo]
+  id = params[:id].to_i
+  session[:lists][id][:todos] << todo_name
   redirect "/lists/#{id}"
 end
