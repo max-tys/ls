@@ -1,5 +1,10 @@
 <%# List name, todos, and button to edit list %>
+
+<% if completed?(@list) %>
+<section id="todos" class="complete">
+<% else %>
 <section id="todos">
+<% end %>
   <header>
     <h2><%= @list[:name] %></h2>
     <ul>

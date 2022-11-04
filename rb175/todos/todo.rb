@@ -144,9 +144,26 @@ end
 post '/lists/:list_id/complete_all' do
   @list_id = params[:list_id].to_i
   list = session[:lists][@list_id]
+
   list[:todos].each do |todo|
     todo[:completed] = true
   end
+  
   session[:success] = 'All todos have been marked as completed.'
   redirect "/lists/#{@list_id}"
+end
+
+# View helpers
+helpers do
+  # Checks whether a given list is completed
+    # Condition 1: List contains at least 1 todo
+    # Condition 2: All todos are marked as completed
+  def completed?(list)
+    !list[:todos].empty? && 
+    list[:todos].all? { |todo| todo[:completed] }
+  end
+
+  def completed_count(list)
+    list[:todos].count { |todo| todo[:completed] }
+  end
 end
