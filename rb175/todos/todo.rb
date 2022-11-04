@@ -27,12 +27,6 @@ get '/lists/new' do
   erb :new_list, layout: :layout
 end
 
-# Clears all lists, lists.erb
-get '/lists/clear' do
-  session[:lists] = []
-  redirect '/lists'
-end
-
 # Return an error message if list name is invalid.
 # Return nil if name is valid.
 def error_for_list_name(name)
@@ -40,6 +34,14 @@ def error_for_list_name(name)
     'The list name must be between 1 and 100 characters.'
   elsif session[:lists].any? { |list| list[:name] == name }
     'The list name must be unique.'
+  end
+end
+
+# Return an error message if todo name is invalid.
+# Return nil if name is valid.
+def error_for_todo_name(name)
+  if !(1..100).cover? name.length # use cover? instead of include?
+    'The todo name must be between 1 and 100 characters.'
   end
 end
 
@@ -59,8 +61,8 @@ end
 
 # View a single list, list.erb
 get '/lists/:id' do
-  @id = params[:id].to_i
-  @list = session[:lists][@id]
+  @list_id = params[:id].to_i
+  @list = session[:lists][@list_id]
   erb :list, layout: :layout
 end
 
@@ -97,11 +99,32 @@ post '/lists/:id/delete' do
   redirect '/lists'
 end
 
-# Create a new todo item
-post '/lists/:id/todos' do
-  todo_name = params[:todo]
-  id = params[:id].to_i
-  session[:lists][id][:todos] << todo_name
-  session[:success] = "#{todo_name} has been added to the list."
-  redirect "/lists/#{id}"
+# Add a new todo item to a list, check for invalid inputs
+post '/lists/:list_id/todos' do
+  @list_id = params[:list_id].to_i
+  @list = session[:lists][@list_id]
+  todo_name = params[:todo].strip
+  error = error_for_todo_name(todo_name)
+
+  if error
+    session[:error] = error
+    erb :list, layout: :layout
+  else
+    @list[:todos] << { name: todo_name, completed: false }
+    session[:success] = "#{todo_name} has been added to #{@list[:name]}."
+    redirect "/lists/#{@list_id}"
+  end
+end
+
+# Delete single todo, list.erb
+post '/lists/:list_id/todos/:todo_id/delete' do
+  list_id = params[:list_id].to_i
+  list = session[:lists][list_id]
+
+  todo_id = params[:todo_id].to_i
+  todo = list[:todos][todo_id]
+
+  list[:todos].delete_at(todo_id)
+  session[:success] = "#{todo[:name]} has been deleted from #{list[:name]}."
+  redirect "/lists/#{list_id}"
 end
