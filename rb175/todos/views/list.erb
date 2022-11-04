@@ -4,6 +4,11 @@
     <h2><%= @list[:name] %></h2>
     <ul>
       <li>
+        <form action="/lists/<%= @list_id %>/complete_all" method="post">
+          <button class="check" type="submit">Complete All</button>
+        </form>
+      </li>
+      <li>
         <a class="edit" href="/lists/<%= @list_id %>/edit">Edit List</a>
       </li>
     </ul>
@@ -11,8 +16,21 @@
 
   <ul>
     <% @list[:todos].each_with_index do |todo, todo_id| %>
-      <li>
+      <% if todo[:completed] %>
+        <li class="complete">
+      <% else %>
+        <li>
+      <% end %>
+        <%# Checkbox for individual todo %>
+        <form action="/lists/<%= @list_id %>/todos/<%= todo_id %>" method="post" class="check">
+          <input type="hidden" name="completed" value="<%= !todo[:completed] %>" />
+          <button type="submit">Complete</button>
+        </form>
+
+        <%# Todo name %>
         <h3><%= todo[:name] %></h3>
+
+        <%# Delete todo %>
         <form action="/lists/<%= @list_id %>/todos/<%= todo_id %>/delete" method="post" class="delete">
           <button type="submit">Delete</button>
         </form>
