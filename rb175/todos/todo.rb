@@ -13,8 +13,8 @@ helpers do
     # Condition 1: List contains at least 1 todo
     # Condition 2: All todos are marked as completed
   def list_completed?(list)
-    !list[:todos].empty? && 
-    list[:todos].all? { |todo| todo[:completed] }
+    total_todos_count(list) > 0 && 
+    remaining_todos_count(list) == 0
   end
 
   # Count the total number of todos in a list
