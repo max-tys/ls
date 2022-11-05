@@ -8,6 +8,31 @@ configure do
   set :session_secret, 'secret'
 end
 
+helpers do
+  # Checks whether a given list is completed
+    # Condition 1: List contains at least 1 todo
+    # Condition 2: All todos are marked as completed
+  def list_completed?(list)
+    !list[:todos].empty? && 
+    list[:todos].all? { |todo| todo[:completed] }
+  end
+
+  # Count the total number of todos in a list
+  def total_todos_count(list)
+    list[:todos].size
+  end
+
+  # Count the number of incomplete todos in a list
+  def remaining_todos_count(list)
+    list[:todos].count { |todo| !todo[:completed] }
+  end
+
+  # Determine the list class
+  def list_class(list)
+    "complete" if list_completed?(list)
+  end
+end
+
 before do
   session[:lists] ||= []
 end
@@ -151,19 +176,4 @@ post '/lists/:list_id/complete_all' do
   
   session[:success] = 'All todos have been marked as completed.'
   redirect "/lists/#{@list_id}"
-end
-
-# View helpers
-helpers do
-  # Checks whether a given list is completed
-    # Condition 1: List contains at least 1 todo
-    # Condition 2: All todos are marked as completed
-  def completed?(list)
-    !list[:todos].empty? && 
-    list[:todos].all? { |todo| todo[:completed] }
-  end
-
-  def completed_count(list)
-    list[:todos].count { |todo| todo[:completed] }
-  end
 end
