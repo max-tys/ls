@@ -45,8 +45,8 @@ helpers do
   def sort_todos(list, &block)
     complete_todos, incomplete_todos = list[:todos].partition { |todo| todo[:completed] }
 
-    incomplete_todos.each { |todo| yield todo, list[:todos].index(todo) }
-    complete_todos.each { |todo| yield todo, list[:todos].index(todo) }
+    incomplete_todos.each(&block)
+    complete_todos.each(&block)
   end
 end
 
@@ -143,8 +143,18 @@ post '/lists/:id/delete' do
   idx = params[:id].to_i
   list_name = session[:lists][idx][:name]
   session[:lists].delete_at(idx)
-  session[:success] = "#{list_name} has been deleted."
-  redirect '/lists'
+
+  if env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
+    "/lists"
+  else
+    session[:success] = "#{list_name} has been deleted."
+    redirect '/lists'
+  end
+end
+
+def next_todo_id(todos)
+  max = todos.map { |todo| todo[:id] }.max || 0
+  max + 1
 end
 
 # Add a new todo item to a list, check for invalid inputs
@@ -152,29 +162,34 @@ post '/lists/:list_id/todos' do
   @list_id = params[:list_id].to_i
   @list = load_list(@list_id)
   todo_name = params[:todo].strip
-  error = error_for_todo_name(todo_name)
 
+  error = error_for_todo_name(todo_name)
   if error
     session[:error] = error
     erb :list, layout: :layout
   else
-    @list[:todos] << { name: todo_name, completed: false }
+    id = next_todo_id(@list[:todos])
+    @list[:todos] << { id: id, name: todo_name, completed: false }
+
     session[:success] = "#{todo_name} has been added to #{@list[:name]}."
     redirect "/lists/#{@list_id}"
   end
 end
 
-# Delete single todo, list.erb
+# Delete a single todo from a list, list.erb
 post '/lists/:list_id/todos/:todo_id/delete' do
   list_id = params[:list_id].to_i
   list = load_list(list_id)
 
   todo_id = params[:todo_id].to_i
-  todo = list[:todos][todo_id]
+  list[:todos].reject! { |todo| todo_id == todo[:id] }
 
-  list[:todos].delete_at(todo_id)
-  session[:success] = "#{todo[:name]} has been deleted from #{list[:name]}."
-  redirect "/lists/#{list_id}"
+  if env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
+    status 204 # successful status code
+  else
+    session[:success] = "#{todo[:name]} has been deleted from #{list[:name]}."
+    redirect "/lists/#{list_id}"
+  end
 end
 
 # Update the status of a todo
@@ -183,9 +198,10 @@ post '/lists/:list_id/todos/:todo_id' do
   list = load_list(@list_id)
 
   todo_id = params[:todo_id].to_i
-  todo = list[:todos][todo_id]
+  is_completed = (params[:completed] == 'true')
+  todo = list[:todos].find { |todo| todo_id == todo[:id] }
+  todo[:completed] = is_completed
 
-  todo[:completed] = (params[:completed] == 'true')
   session[:success] = 'The todo has been updated.'
   redirect "/lists/#{@list_id}"
 end
