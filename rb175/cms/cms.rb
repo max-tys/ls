@@ -4,6 +4,6 @@ require 'sinatra/reloader' if development?
 require 'tilt/erubis'
 
 get "/" do
-  @documents = Dir.entries("/home/yenseow/ls/rb175/cms/public/documents/*")
+  @documents = Dir.glob("/home/yenseow/ls/rb175/cms/public/documents/*").map{ |name| File.basename(name) }
   erb :index, layout: :layout
 end
