@@ -1,0 +1,10 @@
+Ruby 3.1.2 Released
+Posted by naruse and mame on 12 Apr 2022
+
+Ruby 3.1.2 has been released.
+
+This release includes security fixes. Please check the topics below for details.
+
+CVE-2022-28738: Double free in Regexp compilation
+CVE-2022-28739: Buffer overrun in String-to-Float conversion
+See the commit logs for further details.
