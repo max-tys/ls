@@ -17,7 +17,7 @@ class CMSTest < Minitest::Test
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "about.txt"
+    assert_includes last_response.body, "about.md"
     assert_includes last_response.body, "changes.txt"
     assert_includes last_response.body, "history.txt"
   end
@@ -26,7 +26,7 @@ class CMSTest < Minitest::Test
     get "/history.txt"
     
     assert_equal 200, last_response.status
-    assert_equal "text/plain;charset=utf-8", last_response["Content-Type"]
+    assert_equal "text/plain", last_response["Content-Type"]
     assert last_response.body.include? "1993 - Yukihiro Matsumoto dreams up Ruby."
     assert last_response.body.include? "2013 - Ruby 2.0 released."
     assert last_response.body.include? "2019 - Ruby 2.7 released."
@@ -44,5 +44,13 @@ class CMSTest < Minitest::Test
 
     get "/" # Reload the page
     refute_includes last_response.body, "nonexistent.ext does not exist."
+  end
+
+  def test_markdown_document
+    get "/about.md"
+
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "<h1>Basic Markdown Syntax</h1>"
   end
 end
