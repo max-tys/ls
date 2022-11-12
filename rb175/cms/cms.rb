@@ -36,9 +36,13 @@ end
 
 # Homepage
 get "/" do
-  pattern = File.join(data_path, "*") # ../data/*
-  @files = Dir.glob(pattern).map{ |path| File.basename(path) }
-  erb :index
+  if session[:logged_in]
+    pattern = File.join(data_path, "*") # ../data/*
+    @files = Dir.glob(pattern).map{ |path| File.basename(path) }
+    erb :index
+  else
+    erb :signin
+  end
 end
 
 # Render the new document form
@@ -92,5 +96,14 @@ post "/:filename" do
   File.write(file_path, params[:content])
 
   session[:message] = "#{params[:filename]} has been updated"
+  redirect "/"
+end
+
+post "/:filename/delete" do
+  file_path = File.join(data_path, params[:filename]) # ../data/about.md
+
+  File.delete(file_path)
+
+  session[:message] = "#{params[:filename]} has been deleted"
   redirect "/"
 end
