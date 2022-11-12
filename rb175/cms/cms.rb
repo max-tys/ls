@@ -34,10 +34,33 @@ def data_path
   end
 end
 
+# Homepage
 get "/" do
   pattern = File.join(data_path, "*") # ../data/*
   @files = Dir.glob(pattern).map{ |path| File.basename(path) }
   erb :index
+end
+
+# Render the new document form
+get "/new" do
+  erb :new
+end
+
+# Create new file if its name exists
+post "/new" do
+  file_name = params[:file_name].strip
+
+  if file_name.empty? || File.extname(file_name).length <= 1
+    session[:message] = "A name and an extension is required."
+    status 422
+    erb :new
+  else
+    file_path = File.join(data_path, file_name) # ../data/about.md
+    File.write(file_path, params[:content])
+
+    session[:message] = "#{file_name} has been created."
+    redirect "/"
+  end
 end
 
 get "/:filename" do
