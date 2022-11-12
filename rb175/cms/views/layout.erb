@@ -1,13 +1,15 @@
 <!doctype html>
 <html lang="en-US">
   <head>
-    <title></title>
-    <meta charset="UTF-8">
-    <%# <link rel="stylesheet" href="/stylesheets/whitespace-reset.css"> %>
+    <title>CMS</title>
+    <link rel="stylesheet" href="/stylesheets/cms.css" type="text/css">
   </head>
   <body>
-    <main>
-      <%= yield %>
-    </main>
+    <% if session[:message] %>
+      <p class="message">
+        <%= session.delete(:message) %>
+      </p>
+    <% end %>
+    <%= yield %>
   </body>
 </html>

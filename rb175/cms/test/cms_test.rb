@@ -1,5 +1,7 @@
 ENV["RACK_ENV"] = "test"
 
+require "fileutils"
+
 require "minitest/autorun"
 require "rack/test"
 
@@ -12,24 +14,51 @@ class CMSTest < Minitest::Test
     Sinatra::Application
   end
 
+  def setup
+    FileUtils.mkdir_p(data_path) # ../test/data
+  end
+
+  def teardown
+    # remove directory and al its contents
+    FileUtils.rm_rf(data_path) # ../test/data
+  end
+
+  def create_document(name, content = "")
+    File.open(File.join(data_path, name), "w") do |file| # # ../test/data/about.md
+      file.write(content)
+    end
+  end
+
   def test_index
+    create_document "about.md"
+    create_document "changes.txt"
+
     get "/"
 
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "about.md"
     assert_includes last_response.body, "changes.txt"
-    assert_includes last_response.body, "history.txt"
   end
 
   def test_viewing_text_document
-    get "/history.txt"
+    create_document "changes.txt", "The first major release after 3.0, Ruby 3.1 mostly dedicated to stabilizing new features like concurrency and pattern-matching, but also introduces a bunch of new features."
+
+    get "/changes.txt"
     
     assert_equal 200, last_response.status
     assert_equal "text/plain", last_response["Content-Type"]
-    assert last_response.body.include? "1993 - Yukihiro Matsumoto dreams up Ruby."
-    assert last_response.body.include? "2013 - Ruby 2.0 released."
-    assert last_response.body.include? "2019 - Ruby 2.7 released."
+    assert last_response.body.include? "first major release after 3.0"
+  end
+
+  def test_viewing_markdown_document
+    create_document "about.md", "# Basic Markdown Syntax"
+
+    get "/about.md"
+
+    assert_equal 200, last_response.status
+    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
+    assert_includes last_response.body, "<h1>Basic Markdown Syntax</h1>"
   end
 
   def test_document_not_found
@@ -46,11 +75,25 @@ class CMSTest < Minitest::Test
     refute_includes last_response.body, "nonexistent.ext does not exist."
   end
 
-  def test_markdown_document
-    get "/about.md"
+  def test_edit_document_form
+    create_document "about.md"
+
+    get "/about.md/edit"
 
     assert_equal 200, last_response.status
-    assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "<h1>Basic Markdown Syntax</h1>"
+    assert_includes last_response.body, "<textarea"
+    assert_includes last_response.body, %q(<button type="submit")
+  end
+
+  def test_updating_document
+    post "/changes.txt", content: "new content"
+    assert_equal 302, last_response.status
+
+    get last_response["Location"]
+    assert_includes last_response.body, "changes.txt has been updated"
+
+    get "/changes.txt"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, "new content"
   end
 end

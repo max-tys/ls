@@ -1,6 +1,6 @@
 # Basic Markdown Syntax
 
-See https://www.markdownguide.org/cheat-sheet/.
+See https://www.markdownguide.org/cheat-sheet/ for more info.
 
 | Syntax | Description |
 | ----------- | ----------- |
@@ -8,7 +8,6 @@ See https://www.markdownguide.org/cheat-sheet/.
 | Bold | \*\***bold text**\*\* |
 | Italic | \**italic text*\* |
 | Code | \``code`\` |
-| Highlight  | :joy: |
 
 # What is Ruby?
 
