@@ -82,7 +82,7 @@ post "/new" do
     file_path = File.join(data_path, file_name) # ../data/about.md
     File.write(file_path, params[:content])
 
-    session[:message] = "#{file_name} has been created."
+    session[:message] = "#{file_name} has been created"
     redirect "/"
   end
 end
