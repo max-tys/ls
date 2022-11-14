@@ -36,13 +36,33 @@ end
 
 # Homepage
 get "/" do
-  if session[:logged_in]
     pattern = File.join(data_path, "*") # ../data/*
     @files = Dir.glob(pattern).map{ |path| File.basename(path) }
     erb :index
+end
+
+# Render sign in form
+get "/users/signin" do
+  erb :signin
+end
+
+# Check credentials, sign user in (or not)
+post "/users/signin" do
+  if params[:username] == "admin" && params[:password] == "secret"
+    session[:username] = params[:username]
+    session[:message] = "Welcome!"
+    redirect "/"
   else
+    session[:message] = "Invalid credentials"
+    status 422
     erb :signin
   end
+end
+
+post "/users/signout" do
+  session.delete(:username)
+  session[:message] = "You have been signed out."
+  redirect "/"
 end
 
 # Render the new document form
