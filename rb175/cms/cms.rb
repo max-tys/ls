@@ -34,6 +34,17 @@ def data_path
   end
 end
 
+def signed_in?
+  session[:username]
+end
+
+def sign_in_required
+  unless signed_in?
+    session[:message] = "You must be signed in to do that."
+    redirect "/"
+  end
+end
+
 # Homepage
 get "/" do
     pattern = File.join(data_path, "*") # ../data/*
@@ -65,13 +76,17 @@ post "/users/signout" do
   redirect "/"
 end
 
-# Render the new document form
+# Visit the new document page
 get "/new" do
+  sign_in_required
+
   erb :new
 end
 
 # Create new file if its name exists
 post "/new" do
+  sign_in_required
+
   file_name = params[:file_name].strip
 
   if file_name.empty? || File.extname(file_name).length <= 1
@@ -87,6 +102,7 @@ post "/new" do
   end
 end
 
+# Display .txt and .md files
 get "/:filename" do
   file_path = File.join(data_path, params[:filename]) # ../data/about.md
 
@@ -98,7 +114,10 @@ get "/:filename" do
   end
 end
 
+# Render form for editing files
 get "/:filename/edit" do
+  sign_in_required
+
   file_path = File.join(data_path, params[:filename]) # ../data/about.md
 
   if File.exist?(file_path)
@@ -110,7 +129,10 @@ get "/:filename/edit" do
   end
 end
 
+# Submit edited file
 post "/:filename" do
+  sign_in_required
+
   file_path = File.join(data_path, params[:filename]) # ../data/about.md
 
   File.write(file_path, params[:content])
@@ -119,7 +141,10 @@ post "/:filename" do
   redirect "/"
 end
 
+# Delete a file
 post "/:filename/delete" do
+  sign_in_required
+  
   file_path = File.join(data_path, params[:filename]) # ../data/about.md
 
   File.delete(file_path)
