@@ -12,7 +12,7 @@ form.inline {
   display: inline;
 }
 
-.user-status {
+p.user-status {
   font-style: italic;
   font-size: 0.9em;
 }

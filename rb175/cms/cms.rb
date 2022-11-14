@@ -3,6 +3,7 @@ require 'sinatra/reloader' if development?
 # require 'sinatra/content_for'
 require 'tilt/erubis'
 require 'redcarpet' # renders markdown files
+require 'yaml'
 
 configure do
   enable :sessions
@@ -45,11 +46,20 @@ def sign_in_required
   end
 end
 
+def load_user_credentials
+  credentials_path = if ENV["RACK_ENV"] == "test"
+    File.expand_path("../test/users.yml", __FILE__)
+  else
+    File.expand_path("../users.yml", __FILE__)
+  end
+  YAML.load_file(credentials_path)
+end
+
 # Homepage
 get "/" do
-    pattern = File.join(data_path, "*") # ../data/*
-    @files = Dir.glob(pattern).map{ |path| File.basename(path) }
-    erb :index
+  pattern = File.join(data_path, "*") # ../data/*
+  @files = Dir.glob(pattern).map{ |path| File.basename(path) }
+  erb :index
 end
 
 # Render sign in form
@@ -59,8 +69,11 @@ end
 
 # Check credentials, sign user in (or not)
 post "/users/signin" do
-  if params[:username] == "admin" && params[:password] == "secret"
-    session[:username] = params[:username]
+  credentials = load_user_credentials
+  username = params[:username]
+
+  if credentials.key?(username) && credentials[username] == params[:password]
+    session[:username] = username
     session[:message] = "Welcome!"
     redirect "/"
   else
