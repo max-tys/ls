@@ -24,4 +24,11 @@ UPDATE people
    SET given_name = UPPER(given_name)
  WHERE email LIKE '%teleworm.us';
 
- 
+ -- Lesson 2: NOT NULL and default values
+ -- Write the SQL statement to create a table called temperatures to hold the following data... Keep in mind that all rows in the table should always contain all three values.
+
+CREATE TABLE temperatures (
+     "date" date DEFAULT CURRENT_DATE NOT NULL,
+     low integer DEFAULT 0 NOT NULL,
+     high integer DEFAULT 0 NOT NULL
+);
