@@ -32,3 +32,14 @@ CREATE TABLE temperatures (
      low integer DEFAULT 0 NOT NULL,
      high integer DEFAULT 0 NOT NULL
 );
+
+ -- Lesson 2: NOT NULL and default values
+ -- Each day, it rains one millimeter for every degree the average temperature goes above 35. Write a SQL statement to update the data in the table temperatures to reflect this.
+ -- A decision has been made to store rainfall data in inches. Write the SQL statements required to modify the rainfall column to reflect these new requirements.
+
+UPDATE temperatures
+   SET rainfall = (high + low) / 2 - 35
+ WHERE (high + low) / 2 > 35;
+
+ UPDATE temperatures
+   SET rainfall = rainfall * 0.0393701;
