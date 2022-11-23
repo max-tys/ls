@@ -43,3 +43,33 @@ UPDATE temperatures
 
  UPDATE temperatures
    SET rainfall = rainfall * 0.0393701;
+
+-- Write a SQL query that determines the average duration of movies for each decade represented in the films table, rounded to the nearest minute and listed in chronological order.
+
+SELECT
+     CASE WHEN year < 1950 then '1940'
+          WHEN year < 1960 then '1950'
+          WHEN year < 1970 then '1960'
+          WHEN year < 1980 then '1970'
+          WHEN year < 1990 then '1980'
+          WHEN year < 2000 then '1990'
+          WHEN year < 2010 then '2000'
+     ELSE '2010'
+     END AS decade,
+     ROUND(AVG(duration)) AS average_duration
+FROM films
+GROUP BY decade
+ORDER BY decade;
+
+-- Write a SQL query that will return the following data:
+--  decade |   genre   |                  films
+-- --------+-----------+------------------------------------------
+--    1940 | drama     | Casablanca
+
+SELECT 
+     year / 10 * 10 AS decade, 
+     genre,
+     STRING_AGG(title, ', ') AS films
+FROM films
+GROUP BY decade, genre
+ORDER BY decade;
