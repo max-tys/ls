@@ -73,3 +73,48 @@ SELECT
 FROM films
 GROUP BY decade, genre
 ORDER BY decade;
+
+-- Relational Data and JOINs: Working with Multiple Tables
+-- Write a query that determines what percentage of the customers in the database have purchased a ticket to one or more of the events.
+
+SELECT ROUND( COUNT(DISTINCT(t.customer_id)) 
+            / COUNT(DISTINCT(c.id))::decimal * 100,
+            2)
+AS percent
+FROM tickets AS t
+RIGHT JOIN customers AS c ON t.customer_id = c.id;
+
+-- Relational Data and JOINs: Working with Multiple Tables
+-- Write a query that returns the name of each event and how many tickets were sold for it, in order from most popular to least popular.
+
+SELECT e.name, COUNT(t.event_id) AS popularity
+FROM tickets AS t
+RIGHT JOIN events AS e
+ON t.event_id = e.id
+GROUP BY e.name
+ORDER BY popularity DESC;
+
+-- Relational Data and JOINs: Working with Multiple Tables
+-- Write a query that returns the user id, email address, and number of events for all customers that have purchased tickets to three events.
+
+SELECT c.id, c.email, COUNT(DISTINCT(t.event_id))
+FROM customers AS c
+JOIN tickets AS t
+ON c.id = t.customer_id
+GROUP BY c.id
+HAVING COUNT(DISTINCT(t.event_id)) = 3;
+
+-- Relational Data and JOINs: Working with Multiple Tables
+-- Write a query to print out a report of all tickets purchased by the customer with the email address 'gennaro.rath@mcdermott.co'. The report should include the event name and starts_at and the seat's section name, row, and seat number.
+
+SELECT e.name AS event, 
+       e.starts_at,
+       s2.name AS section,
+       s1.row,
+       s1.number AS seat
+FROM tickets AS t
+     JOIN events    AS e  ON t.event_id = e.id
+     JOIN seats     AS s1 ON t.seat_id = s1.id
+     JOIN sections  AS s2 ON s1.section_id = s2.id
+     JOIN customers AS c  ON t.customer_id = c.id
+WHERE c.email = 'gennaro.rath@mcdermott.co';
