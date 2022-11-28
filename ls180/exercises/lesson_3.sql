@@ -133,3 +133,53 @@ INSERT INTO directors_films
 (film_id, director_id) VALUES
 (1, 1), (2, 2), (3, 3), (4, 4), (5, 5),
 (6, 6), (7, 3), (8, 7), (9, 8), (10, 4);
+
+-- Assignment 13: Many-to-Many Relationships
+-- Question 4: Write a SQL statement to remove any unneeded columns from films.
+
+ALTER TABLE films
+DROP COLUMN director_id;
+
+-- Assignment 13: Many-to-Many Relationships
+-- Question 5: Write a SQL statement that will return the following result:
+
+SELECT films.title, directors.name
+FROM directors
+  JOIN directors_films ON directors.id = directors_films.director_id
+  JOIN films ON directors_films.film_id = films.id
+ORDER BY films.title;
+
+-- Assignment 13: Many-to-Many Relationships
+-- Question 6: Write SQL statements to insert data for the following films into the database
+
+INSERT INTO films
+(title, year, genre, duration) VALUES
+('Fargo', 1996, 'comedy', 98),
+('No Country for Old Men', 2007, 'western', 122),
+('Sin City', 2005, 'crime', 124),
+('Spy Kids', 2001, 'scifi', 88);
+
+INSERT INTO directors
+(name) VALUES
+('Joel Coen'),
+('Ethan Coen'),
+('Frank Miller'),
+('Robert Rodriguez');
+
+INSERT INTO directors_films
+(film_id, director_id) VALUES
+(11, 9),
+(12, 9),
+(12, 10),
+(13, 11),
+(13, 12),
+(14, 12);
+
+-- Assignment 13: Many-to-Many Relationships
+-- Question 7: Write a SQL statement that determines how many films each director in the database has directed. Sort the results by number of films (greatest first) and then name (in alphabetical order).
+
+SELECT d.name AS director, COUNT(df.film_id) AS films
+FROM directors AS d
+  JOIN directors_films AS df ON d.id = df.director_id
+GROUP BY d.name
+ORDER BY films DESC, director;
