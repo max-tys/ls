@@ -120,3 +120,16 @@ SELECT c.name, COUNT(b.id) AS book_count, STRING_AGG(b.title, ', ') AS book_titl
 -- Assignment 13: Many-to-Many Relationships
 -- Question 2: Write the SQL statement needed to create a join table that will allow a film to have multiple directors, and directors to have multiple films. Include an id column in this table, and add foreign key constraints to the other columns.
 
+CREATE TABLE directors_films (
+  id serial PRIMARY KEY,
+  director_id integer REFERENCES directors(id) ON DELETE CASCADE,
+  film_id integer REFERENCES films(id) ON DELETE CASCADE
+);
+
+-- Assignment 13: Many-to-Many Relationships
+-- Question 3: Write the SQL statements needed to insert data into the new join table to represent the existing one-to-many relationships.
+
+INSERT INTO directors_films
+(film_id, director_id) VALUES
+(1, 1), (2, 2), (3, 3), (4, 4), (5, 5),
+(6, 6), (7, 3), (8, 7), (9, 8), (10, 4);
