@@ -109,3 +109,80 @@ ORDER BY c.id;
 -- 5. Further Exploration
 -- Can you modify the above command so the output looks like this?
 
+SELECT CASE LAG(c.name) OVER (ORDER BY c.name)
+            WHEN c.name THEN ''
+            ELSE c.name
+       END,
+       s.description
+FROM customers AS c
+LEFT OUTER JOIN customers_services
+             ON customer_id = c.id
+LEFT OUTER JOIN services AS s
+             ON s.id = service_id;
+
+-- 6) Services with at least 3 customers
+-- Write a query that displays the description for every service that is subscribed to by at least 3 customers. Include the customer count for each description in the report. The report should look like this:
+
+SELECT s.description, COUNT(cs.customer_id)
+  FROM customers_services AS cs 
+  JOIN services AS s ON cs.service_id = s.id
+ GROUP BY s.description
+HAVING COUNT(cs.customer_id) >= 3;
+
+-- 7) Total gross income
+-- Assuming that everybody in our database has a bill coming due, and that all of them will pay on time, write a query to compute the total gross income we expect to receive.
+
+SELECT SUM(subtotal) AS gross FROM (
+       SELECT COUNT(cs.service_id) * s.price AS subtotal
+         FROM customers_services AS cs
+         JOIN services AS s ON cs.service_id = s.id
+        GROUP BY s.price) X;
+
+-- 8) Add new customer
+-- A new customer, 'John Doe', has signed up with our company. His payment token is 'EYODHLCN'. Initially, he has signed up for UNIX hosting, DNS, and Whois Registration. Create any SQL statement(s) needed to add this record to the database.
+
+INSERT INTO customers
+(name, payment_token) VALUES
+('John Doe', 'EYODHLCN');
+
+INSERT INTO customers_services
+(customer_id, service_id) VALUES
+(7, 1),
+(7, 2),
+(7, 3);
+
+-- 9) Hypothetically
+-- The company president is looking to increase revenue. As a prelude to his decision making, he asks for two numbers: the amount of expected income from "big ticket" services (those services that cost more than $100) and the maximum income the company could achieve if it managed to convince all of its customers to select all of the company's big ticket items.
+
+SELECT SUM(price) 
+  FROM customers_services AS cs
+  JOIN services AS s ON cs.service_id = s.id
+ WHERE price > 100;
+
+SELECT price
+FROM customers
+CROSS JOIN services
+WHERE price > 100;
+
+-- 10) Deleting Rows
+-- Write the necessary SQL statements to delete the "Bulk Email" service and customer "Chen Ke-Hua" from the database.
+
+DELETE FROM customers_services
+ WHERE service_id = (
+       SELECT id
+         FROM services
+        WHERE description = 'Bulk Email'
+ );
+
+DELETE FROM services 
+ WHERE description = 'Bulk Email';
+
+DELETE FROM customers_services
+ WHERE customer_id = (
+       SELECT id
+         FROM customers
+        WHERE name = 'Chen Ke-Hua'
+ );
+
+DELETE FROM customers
+ WHERE name = 'Chen Ke-Hua';
