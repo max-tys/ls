@@ -38,3 +38,7 @@ CREATE INDEX ON bids (bidder_id, item_id);
 \copy bidders FROM './csv/bidders.csv' csv header;
 \copy items FROM './csv/items.csv' csv header;
 \copy bids FROM './csv/bids.csv' csv header;
+
+-- Conditional Subqueries: IN
+-- Write a SQL query that shows all items that have had bids put on them. Use the logical operator IN for this exercise, as well as a subquery.
+-- Continue from here...
