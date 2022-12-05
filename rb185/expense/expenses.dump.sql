@@ -28,8 +28,7 @@ CREATE TABLE public.expenses (
     id integer NOT NULL,
     amount numeric(6,2) NOT NULL,
     memo text NOT NULL,
-    created_on date NOT NULL,
-    CONSTRAINT positive_amount CHECK ((amount > (0)::numeric))
+    created_on date NOT NULL
 );
 
 
@@ -68,18 +67,13 @@ ALTER TABLE ONLY public.expenses ALTER COLUMN id SET DEFAULT nextval('public.exp
 -- Data for Name: expenses; Type: TABLE DATA; Schema: public; Owner: yenseow
 --
 
-INSERT INTO public.expenses VALUES (1, 14.56, 'Pencils', '2022-12-02');
-INSERT INTO public.expenses VALUES (2, 3.29, 'Coffee', '2022-12-02');
-INSERT INTO public.expenses VALUES (3, 49.99, 'Text Editor', '2022-12-02');
-INSERT INTO public.expenses VALUES (5, 3.59, 'More Coffee', '2022-12-02');
-INSERT INTO public.expenses VALUES (6, 199.00, 'School Fees', '2022-12-02');
 
 
 --
 -- Name: expenses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: yenseow
 --
 
-SELECT pg_catalog.setval('public.expenses_id_seq', 6, true);
+SELECT pg_catalog.setval('public.expenses_id_seq', 1, false);
 
 
 --
