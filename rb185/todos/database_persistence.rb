@@ -1,20 +1,35 @@
 require 'pg'
 
 class DatabasePersistence
-  def initialize
-    @db = PG.connect(dbname: "todos")
+  def initialize(logger)
+    @db = PG.connect(dbname: 'todos')
+    @logger = logger
+  end
+
+  def query(statement, *params)
+    @logger.info "#{statement}: #{params}"
+    @db.exec_params(statement, params)
   end
 
   def find_list(id)
-    # @session[:lists].find{ |list| list[:id] == id }
-  end
+    sql = 'SELECT * FROM lists WHERE id = $1'
+    result = query(sql, id)
+    tuple = result.first
+
+    list_id = tuple['id'].to_i
+    todos = find_todos_for_list(list_id)
+    { id: list_id, name: tuple['name'], todos: todos }
+  end 
 
   def all_lists
-    sql = "SELECT * FROM lists"
-    result = @db.exec(sql)
+    sql = 'SELECT * FROM lists'
+    result = query(sql)
 
     result.map do |tuple|
-      { id: tuple["id"], name: tuple["name"], todos: [] }
+      list_id = tuple['id'].to_i
+      todos = find_todos_for_list(list_id)
+
+      { id: list_id, name: tuple['name'], todos: todos }
     end
   end
 
@@ -52,5 +67,18 @@ class DatabasePersistence
     # list = find_list(list_id)
     # list[:todos].each do |todo|
     #   todo[:completed] = true
+  end
+
+  private
+
+  def find_todos_for_list(list_id)
+    todo_sql = 'SELECT * FROM todos WHERE list_id = $1'
+    todo_result = query(todo_sql, list_id)
+
+    todo_result.map do |tuple|
+      { id: tuple['id'].to_i, 
+        name: tuple['name'],
+        completed: tuple['completed'] == 't' }
+    end
   end
 end
