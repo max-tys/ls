@@ -2,8 +2,13 @@ require 'pg'
 
 class DatabasePersistence
   def initialize(logger)
-    @db = PG.connect(dbname: 'todos')
+    @db = if Sinatra::Base.production?
+            PG.connect(ENV['DATABASE_URL'])
+          else
+            PG.connect(dbname: 'todos')
+          end
     @logger = logger
+    setup_schema
   end
 
   def query(statement, *params)
@@ -79,6 +84,34 @@ class DatabasePersistence
       { id: tuple['id'].to_i,
         name: tuple['name'],
         completed: tuple['completed'] == 't' }
+    end
+  end
+
+  def setup_schema
+    begin
+      query('SELECT COUNT(*) FROM lists')
+    rescue PG::Error
+      sql = <<~SQL
+        CREATE TABLE lists (
+          id    serial  PRIMARY KEY,
+          name  text    NOT NULL UNIQUE
+        );
+      SQL
+      query(sql)
+    end
+
+    begin
+      query('SELECT COUNT(*) FROM todos')
+    rescue PG::Error
+      sql = <<~SQL
+        CREATE TABLE todos (
+          id        serial  PRIMARY KEY,
+          name      text    NOT NULL,
+          completed boolean NOT NULL DEFAULT 'false',
+          list_id   integer NOT NULL REFERENCES lists(id)
+        );#{'      '}
+      SQL
+      query(sql)
     end
   end
 end

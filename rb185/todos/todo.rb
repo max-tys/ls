@@ -6,7 +6,7 @@ require_relative 'database_persistence'
 
 configure do
   enable :sessions
-  set :session_secret, 'secret'
+  set :session_secret, 'ef183c8c63b969e20db1e4a06fe711c39ed32b52bc31c0bb36e59a55772e9c02'
   set :erb, escape_html: true
 end
 
