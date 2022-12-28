@@ -8,7 +8,7 @@ require 'bcrypt'
 
 configure do
   enable :sessions
-  set :session_secret, 'secret'
+  set :session_secret, '42a2f0b649525870f459d2252ff5585a5815fc2a6adfe72104c90514e9ff5a1a'
 end
 
 def render_markdown(text)
