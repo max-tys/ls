@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Form</title>
+  <style>
+    body * {
+      font-size: 18px;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    fieldset {
+      margin: 0;
+      padding: 1rem;
+    }
+    dl {
+      box-sizing: border-box;
+      width: 100%;
+      margin-top: 0;
+    }
+    dd {
+      margin-left: 0;
+    }
+  </style>
+</head>
+<body>
+  <form action="#" method="get">
+    <fieldset>
+      <dl>
+        <dt><label for="first-name">First Name</label></dt>
+        <dd><input type="text" name="first-name" id="first-name"></dd>
+      </dl>
+      <dl>
+        <dt><label for="last-name">Last Name</label></dt>
+        <dd><input type="text" name="last-name" id="last-name"></dd>
+      </dl>
+      <dl>
+        <dt><label for="email">Email</label></dt>
+        <dd><input type="email" name="email" id="email" placeholder="john.doe@gmail.com"></dd>
+      </dl>
+      <dl>
+        <dt><label for="city">City</label></dt>
+        <dd><input type="text" name="city" id="city"></dd>
+      </dl>
+      <dl>
+        <dt><label for="state">State</label></dt>
+        <dd>
+          <select name="state">
+            <option>AK</option>
+            <option>AL</option>
+            <option>AR</option>
+            <option>AZ</option>
+            <option>CA</option>
+            <option>CO</option>
+            <option>CT</option>
+            <option>DC</option>
+            <option>DE</option>
+            <option>FL</option>
+            <option>GA</option>
+            <option>HI</option>
+            <option>IA</option>
+            <option>ID</option>
+            <option>IL</option>
+            <option>IN</option>
+            <option>KS</option>
+            <option>KY</option>
+            <option>LA</option>
+            <option>MA</option>
+            <option>MD</option>
+            <option>ME</option>
+            <option>MI</option>
+            <option>MN</option>
+            <option>MO</option>
+            <option>MS</option>
+            <option>MT</option>
+            <option>NC</option>
+            <option>ND</option>
+            <option>NE</option>
+            <option>NH</option>
+            <option>NJ</option>
+            <option>NM</option>
+            <option>NV</option>
+            <option>NY</option>
+            <option>OH</option>
+            <option>OK</option>
+            <option>OR</option>
+            <option>PA</option>
+            <option>RI</option>
+            <option>SC</option>
+            <option>SD</option>
+            <option>TN</option>
+            <option>TX</option>
+            <option>UT</option>
+            <option>VA</option>
+            <option>VT</option>
+            <option>WA</option>
+            <option>WI</option>
+            <option>WV</option>
+            <option>WY</option>
+          </select>
+        </dd>
+      </dl>
+      <dl>
+        <dt><label for="zipcode">Zipcode</label></dt>
+        <dd><input type="number" name="zipcode" id="zipcode" min="10000" max="99999" placeholder="12345"></dd>
+      </dl>
+      <dl>
+        <dt><label for="colors">Which of these colors do you like best?</label></dt>
+        <dd>
+          <select name="colors" id="colors" size="4">
+            <option value="Red" selected>Red</option>            <option value="Green">Green</option>
+            <option value="Blue">Blue</option>
+            <option value="Yellow">Yellow</option>
+          </select>
+        </dd>
+      </dl>
+      <dl>
+        <dt><label for="technologies">Which web technologies do you want to learn?</label></dt>
+        <dd>
+          <select name="technologies" id="technologies" multiple size="4">
+            <option value="HTML">HTML</option>
+            <option value="CSS">CSS</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="Ruby">Ruby</option>
+            <option value="Rails">Rails</option>
+          </select>
+        </dd>
+      </dl>
+      <dl>
+        <dt><label for="comments">Comments</label></dt>
+        <dd>
+          <textarea name="comments" id="comments" cols="80" rows="6"></textarea>
+        </dd>
+      </dl>
+      <input type="hidden" name="date" id="date" value="2023-01-01">
+      <input type="submit" value="Submit">
+    </fieldset>
+  </form>
+</body>
+</html>
