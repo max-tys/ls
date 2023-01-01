@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice Problems: Forms</title>
+  <style>
+    body {
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-size: 18px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    form ul {
+      padding-left: 0;
+    }
+    form ul li {
+      list-style-type: none;
+      display: inline;
+    }
+    form dd {
+      margin-left: 0;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <form action="#" method="post">
+    <fieldset>
+      <dl>
+        <dt><label for="first-name">First Name</label></dt>
+        <dd><input type="text" name="first-name" id="first-name" required></dd>
+        
+        <dt><label for="last-name">Last Name</label></dt>
+        <dd><input type="text" name="last-name" id="last-name" required></dd>
+        
+        <dt><label for="email">Email Address</label></dt>
+        <dd><input type="email" name="email" id="email" autocomplete="off" autocapitalize="none" spellcheck="false" required></dd>
+        
+        <dt><label for="phone">Phone Number</label></dt>
+        <dd><input type="tel" name="phone" id="phone" placeholder="###-###-####" required></dd>
+  
+        <dt><label for="phone-type">Phone Type</label></dt>
+        <dd>
+          <select name="phone-type" id="phone-type">
+            <option value="home" selected>Home</option>
+            <option value="business">Business</option>
+            <option value="mobile">Mobile</option>
+          </select>
+        </dd>
+
+        <dt><label for="message">Message</label></dt>
+        <dd><textarea name="message" id="message" cols="80" rows="6" placeholder="Type your message here"></textarea></dd>
+
+        <input type="submit" value="Send">
+      </dl>
+    </fieldset>
+  </form>
+
+  <form action="#" method="get">
+    <fieldset>
+      <label>
+        Search for
+        <input type="search" name="query" id="query">
+      </label>
+      
+      <label>
+        <input type="radio" name="filter" value="tv" required>
+        TV
+      </label>
+      
+      <label>
+        <input type="radio" name="filter" value="movies" required>
+        Movies
+      </label>
+
+      <label>
+        <input type="radio" name="filter" value="music" required>
+        Music
+      </label>
+      
+      <button name="search">Search</button>
+    </fieldset>
+  </form>
+
+  <form action="#" method="post">
+    <fieldset>
+      <dl>
+        <dt><label for="title">Movie</label></dt>
+        <dd>
+          <select name="title" id="title" size="4">
+            <option value="Looper">Looper</option>
+            <option value="Frozen">Frozen</option>
+            <option value="Tommy Boy">Tommy Boy</option>
+            <option value="Alien" selected>Alien</option>
+          </select>
+        </dd>
+
+        <dt><label for="rating">Rating</label></dt>
+        <dd>
+          <input type="number" name="rating" id="rating" min="1" max="5">
+        </dd>
+
+        <div>
+          <label>
+            <input type="checkbox" name="favorites" checked>
+            Add to my favorites
+          </label>
+        </div>
+
+        <input type="submit" value="Rate movie">
+    </fieldset>
+  </form>
+
+  <form action="#" method="get">
+    <fieldset>
+      <h1>Category</h1>
+      <ul>
+        <li>
+          <label>
+            <input type="radio" name="category" value="core" required>
+            Core
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="category" value="plugins" required>
+            Plugins and Libraries
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="category" value="conventions" required>
+            Conventions
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="category" value="Ruby" required>
+            Reviews
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="category" value="opinion" required>
+            Opinion
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" name="category" value="people" required>
+            People
+          </label>
+        </li>
+      </ul>
+  
+      <h1>Tags</h1>
+      <ul>
+        <li>
+          <label>
+            <input type="checkbox" name="html">
+            HTML
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" name="css">
+            CSS
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" name="javascript">
+            Javascript
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" name="ruby">
+            Ruby
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" name="rails">
+            Rails
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" name="python">
+            Python
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="checkbox" name="django">
+            Django
+          </label>
+        </li>
+      </ul>
+  
+      <input type="submit" value="Filter">
+    </fieldset>
+  </form>
+
+  <form action="#" method="get">
+    <fieldset>
+      <dl>
+        <dt><label for="category">Category</label></dt>
+        <dd>
+          <select name="category" id="category" size="5">
+            <option value="Core">Core</option>
+            <option value="Plugins and Libraries">Plugins and Libraries</option>
+            <option value="Conventions">Conventions</option>
+            <option value="Reviews">Reviews</option>
+            <option value="Opinion">Opinion</option>
+            <option value="People">People</option>
+          </select>
+        </dd>
+
+        <dt><label for="tags">Tags</label></dt>
+        <dd>
+          <select name="tags" id="tags" multiple size="5">
+            <option value="HTML">HTML</option>
+            <option value="CSS">CSS</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="Ruby">Ruby</option>
+            <option value="Rails">Rails</option>
+            <option value="Python">Python</option>
+            <option value="Django">Django</option>
+          </select>
+        </dd>
+      </dl>
+
+      <input type="submit" value="Filter">
+      <input type="reset">
+    </fieldset>
+  </form>
+</body>
+</html>
