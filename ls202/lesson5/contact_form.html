@@ -7,31 +7,90 @@
   <title>Contact Form</title>
   <style>
     body * {
-      font-size: 18px;
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    }
-    fieldset {
-      margin: 0;
-      padding: 1rem;
+      font-size: 16px;
     }
     dl {
-      box-sizing: border-box;
-      width: 100%;
-      margin-top: 0;
+      margin: 0;
+    }
+    dt {
+      margin: 0 0 0.5rem 0;
     }
     dd {
-      margin-left: 0;
+      margin: 0 0 1.5rem 0;
+    }
+    fieldset {
+      border: none;
+      margin: 2rem auto;
+      padding: 0;
+      width: 60%;
+    }
+    input[type="text"],
+    input[type="email"],
+    option,
+    select,
+    textarea {
+      border: 1px rgb(187, 187, 187) solid;
+      border-radius: 5px;
+      box-sizing: border-box;
+      height: 2.5rem;
+      padding: 0.5rem;
+      width: 100%;
+    }
+    input[type="submit"],
+    input[type="reset"] {
+      height: 2.5rem;
+      padding: 0 1rem;
+    }
+    option {
+      border: none;
+      border-radius: 0;
+    }
+    select {
+      height: auto;
+      min-height: 2.5rem;
+      overflow: hidden;
+      padding: 0;
+      width: 100%;
+    }
+    textarea {
+      height: auto;
+      resize: vertical;
+    }
+    .partial {
+      box-sizing: border-box;
+      display: inline-block;
+    }
+    .one-half {
+      width: 50%;
+    }
+    .left {
+      padding-right: 0.5rem;
+    }
+    .right {
+      padding-left: 0.5rem;
+    }
+    .city {
+      width: 50%;
+      padding-right: 1rem;
+    }
+    .state {
+      width: 10%;
+    }
+    .zipcode {
+      padding-left: 1rem;
+      width: 40%;
     }
   </style>
 </head>
 <body>
   <form action="#" method="get">
     <fieldset>
-      <dl>
+      <dl class="partial one-half left">
         <dt><label for="first-name">First Name</label></dt>
         <dd><input type="text" name="first-name" id="first-name"></dd>
-      </dl>
-      <dl>
+      </dl><!--
+      --><dl class="partial one-half right">
         <dt><label for="last-name">Last Name</label></dt>
         <dd><input type="text" name="last-name" id="last-name"></dd>
       </dl>
@@ -39,14 +98,14 @@
         <dt><label for="email">Email</label></dt>
         <dd><input type="email" name="email" id="email" placeholder="john.doe@gmail.com"></dd>
       </dl>
-      <dl>
+      <dl class="partial city">
         <dt><label for="city">City</label></dt>
         <dd><input type="text" name="city" id="city"></dd>
-      </dl>
-      <dl>
+      </dl><!--
+      --><dl class="partial state">
         <dt><label for="state">State</label></dt>
         <dd>
-          <select name="state">
+          <select name="state" id="state">
             <option>AK</option>
             <option>AL</option>
             <option>AR</option>
@@ -100,16 +159,17 @@
             <option>WY</option>
           </select>
         </dd>
-      </dl>
-      <dl>
+      </dl><!--
+      --><dl class="partial zipcode">
         <dt><label for="zipcode">Zipcode</label></dt>
-        <dd><input type="number" name="zipcode" id="zipcode" min="10000" max="99999" placeholder="12345"></dd>
+        <dd><input type="text" name="zipcode" id="zipcode" pattern="[0-9]{5}" placeholder="12345"></dd>
       </dl>
       <dl>
-        <dt><label for="colors">Which of these colors do you like best?</label></dt>
+        <dt><label for="colors">What's your favorite color?</label></dt>
         <dd>
           <select name="colors" id="colors" size="4">
-            <option value="Red" selected>Red</option>            <option value="Green">Green</option>
+            <option value="Red" selected>Red</option>
+            <option value="Green">Green</option>
             <option value="Blue">Blue</option>
             <option value="Yellow">Yellow</option>
           </select>
@@ -118,7 +178,7 @@
       <dl>
         <dt><label for="technologies">Which web technologies do you want to learn?</label></dt>
         <dd>
-          <select name="technologies" id="technologies" multiple size="4">
+          <select name="technologies" id="technologies" multiple size="5">
             <option value="HTML">HTML</option>
             <option value="CSS">CSS</option>
             <option value="JavaScript">JavaScript</option>
@@ -130,11 +190,12 @@
       <dl>
         <dt><label for="comments">Comments</label></dt>
         <dd>
-          <textarea name="comments" id="comments" cols="80" rows="6"></textarea>
+          <textarea name="comments" id="comments" rows="6"></textarea>
         </dd>
       </dl>
       <input type="hidden" name="date" id="date" value="2023-01-01">
-      <input type="submit" value="Submit">
+      <input type="submit" value="Send">
+      <input type="reset">
     </fieldset>
   </form>
 </body>
